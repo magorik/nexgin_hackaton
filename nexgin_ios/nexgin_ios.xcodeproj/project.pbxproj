@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		043A8D4A21BB77B1009E671D /* RoundViewWithGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043A8D4921BB77B1009E671D /* RoundViewWithGradient.swift */; };
+		0493291521BC6D3D0090AC4D /* NGDynamicTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493291421BC6D3D0090AC4D /* NGDynamicTable.swift */; };
 		04BF766121BB7E430038CDC5 /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BF766021BB7E430038CDC5 /* UserTableViewCell.swift */; };
 		04BF766321BB7EBC0038CDC5 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BF766221BB7EBC0038CDC5 /* UserModel.swift */; };
 		04BF766921BB7F5B0038CDC5 /* UserTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BF766821BB7F5B0038CDC5 /* UserTableViewModel.swift */; };
@@ -31,6 +32,7 @@
 		043A8D4721BB76FF009E671D /* Comfortaa-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comfortaa-Light.ttf"; sourceTree = "<group>"; };
 		043A8D4821BB76FF009E671D /* Comfortaa-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comfortaa-Regular.ttf"; sourceTree = "<group>"; };
 		043A8D4921BB77B1009E671D /* RoundViewWithGradient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundViewWithGradient.swift; sourceTree = "<group>"; };
+		0493291421BC6D3D0090AC4D /* NGDynamicTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGDynamicTable.swift; sourceTree = "<group>"; };
 		04BF766021BB7E430038CDC5 /* UserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		04BF766221BB7EBC0038CDC5 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		04BF766821BB7F5B0038CDC5 /* UserTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewModel.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 		04E1161F21BB71ED00168876 = {
 			isa = PBXGroup;
 			children = (
+				0493291421BC6D3D0090AC4D /* NGDynamicTable.swift */,
 				04BF767621BBCC400038CDC5 /* SocketIOManager.swift */,
 				04BF766E21BB87530038CDC5 /* NGExtensions.swift */,
 				04BF766821BB7F5B0038CDC5 /* UserTableViewModel.swift */,
@@ -282,6 +285,7 @@
 				043A8D4A21BB77B1009E671D /* RoundViewWithGradient.swift in Sources */,
 				04BF767721BBCC400038CDC5 /* SocketIOManager.swift in Sources */,
 				04BF766921BB7F5B0038CDC5 /* UserTableViewModel.swift in Sources */,
+				0493291521BC6D3D0090AC4D /* NGDynamicTable.swift in Sources */,
 				04BF766321BB7EBC0038CDC5 /* UserModel.swift in Sources */,
 				04BF766121BB7E430038CDC5 /* UserTableViewCell.swift in Sources */,
 			);

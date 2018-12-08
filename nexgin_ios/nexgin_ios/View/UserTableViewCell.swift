@@ -8,7 +8,20 @@
 
 import UIKit
 
-class UserTableViewCell: UITableViewCell {
+extension LiveUpdateCell: LiveUpdateModelDelegate {
+    func dataUpdated() {
+        setupWith(user: model)
+    }
+}
+
+class LiveUpdateCell: UITableViewCell {
+    var model: LiveUpdateModel?
+
+    func setupWith(user: LiveUpdateModel?) {}
+}
+
+
+class UserTableViewCell: LiveUpdateCell {
 
     @IBOutlet weak var shadowView: ShadowView!
     @IBOutlet weak var gradientView: RoundViewWithGradient!
@@ -22,6 +35,9 @@ class UserTableViewCell: UITableViewCell {
         
         clasterIndicatorView.layer.borderWidth = 1
         areaIndicatorView.layer.borderWidth = 1
+        
+        clasterIndicatorView.layer.cornerRadius = 8
+        areaIndicatorView.layer.cornerRadius = 8
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -30,8 +46,14 @@ class UserTableViewCell: UITableViewCell {
         setStateFor(selected: selected)
     }
     
-    func setupWith(user: UserModel?, index: Int) {
-        userNameLabel.text = "Пользователь #" + String(index)
+    override func setupWith(user: LiveUpdateModel?) {
+        guard let user = user as? UserModel else {
+            return
+        }
+        
+        model = user
+        model?.delegate = self
+        userNameLabel.text = user.x
     }
     
     private func setStateFor(selected: Bool) {
@@ -41,8 +63,8 @@ class UserTableViewCell: UITableViewCell {
             clasterIndicatorView.layer.borderColor = UIColor.white.cgColor
             areaIndicatorView.layer.borderColor = UIColor.white.cgColor
         } else {
-            clasterIndicatorView.layer.borderColor = UIColor.black.cgColor
-            areaIndicatorView.layer.borderColor = UIColor.black.cgColor
+            clasterIndicatorView.layer.borderColor = UIColor.clear.cgColor
+            areaIndicatorView.layer.borderColor = UIColor.clear.cgColor
         }
         
         let color = selected ? .white : UIColor.hexStringToUIColor(hex: "1F2124")

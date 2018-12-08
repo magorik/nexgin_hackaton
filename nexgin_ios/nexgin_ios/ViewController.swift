@@ -10,6 +10,9 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet var userTableViewModel: UserTableViewModel!
+    @IBOutlet var areaTableViewModel: AreaTableViewModel!
+
     @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet weak var gridView: GridView!
@@ -24,6 +27,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         scrollView.contentSize.width = 1000
+        
+        scrollView.minimumZoomScale = 0.5
+        scrollView.minimumZoomScale = 1.0
+
         SocketManager.shared.delegate = self
         
         stratTimer()
@@ -43,7 +50,7 @@ class ViewController: UIViewController {
         }.fire()
     }
     
-    private func addImage(x: CGFloat, y: CGFloat, identifier: String) {
+    private func addImage(x: CGFloat, y: CGFloat, identifier: String, color: UIColor) {
         if let image = images[identifier] {
             UIView.animate(withDuration: 2.3, animations: {
                 image.frame = CGRect(x: x , y: y , width: 20, height: 20)
@@ -52,7 +59,7 @@ class ViewController: UIViewController {
             let image = UIImageView(frame: CGRect(x: x, y: y, width: 20, height: 20))
             image.layer.cornerRadius = 10
             image.clipsToBounds = false
-            image.backgroundColor = .random()
+            image.backgroundColor = color
             
             images[identifier] = image
             scrollView.addSubview(image)
@@ -76,9 +83,20 @@ extension UIColor {
 }
 
 extension ViewController: SocketManagerProtocol {
-    func didRecieveObjects(objects: [UserModel]) {
-        for object in objects {
-            addImage(x: CGFloat(Float(object.x!)!), y: CGFloat(Float(object.y!)!), identifier: object.identifier!)
+    func didRecieveObjects(objects: [String: UserModel]) {        
+        if userTableViewModel.data == nil {
+           userTableViewModel.data = objects
+        } else {
+            for (key, value) in objects {
+                if let existingObject = userTableViewModel.data?[key] as? UserModel {
+                    existingObject.x = value.x
+                    existingObject.y = value.y
+                    existingObject.color = .random()
+                    existingObject.delegate?.dataUpdated()
+                    
+                    addImage(x: CGFloat(Float(value.x!)!), y: CGFloat(Float(value.y!)!), identifier: value.identifier!, color: (existingObject.color)!)
+                }
+            }
         }
     }
 }

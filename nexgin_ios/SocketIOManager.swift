@@ -11,7 +11,7 @@ import ObjectMapper
 import SwiftyJSON
 
 protocol SocketManagerProtocol {
-    func didRecieveObjects(objects: [UserModel])
+    func didRecieveObjects(objects: [String: UserModel])
 }
 
 class SocketManager:WebSocketDelegate {
@@ -31,9 +31,8 @@ class SocketManager:WebSocketDelegate {
         
         do {
             let parsedData = try JSONSerialization.jsonObject(with: rawData!) as! [String:Any]
-            if let array = parsedData["message"] as? [[String:Any]] {
-                let objects =  Mapper<UserModel>().mapArray(JSONObject: array)
-                //                let objects = Mapper<UserModel>().mapArray(JSONArray: arr)
+            if let array = parsedData["message"] as? [String:[String: Any]] {
+                let objects =  Mapper<UserModel>().mapDictionary(JSON: array)
                 if let delegate = delegate {
                     delegate.didRecieveObjects(objects: objects!)
                 }

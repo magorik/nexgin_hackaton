@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AreaTableViewCell: UITableViewCell {
+class AreaTableViewCell: LiveUpdateCell {
 
     @IBOutlet weak var gradientView: RoundViewWithGradient!
     @IBOutlet weak var areaNameLabel: UILabel!
@@ -32,8 +32,14 @@ class AreaTableViewCell: UITableViewCell {
         setStateFor(selected: selected)
     }
     
-    func setupWith(user: UserModel?, index: Int) {
-        areaNameLabel.text = "Область #" + String(index)
+    override func setupWith(user: LiveUpdateModel?) {
+        guard let user = user as? UserModel else {
+            return
+        }
+        
+        model = user
+        model?.delegate = self
+        areaNameLabel.text = "Область #"
         areaColorView.backgroundColor = .green
     }
     

@@ -9,8 +9,18 @@
 import UIKit
 import ObjectMapper
 
-class UserModel: Mappable {
+class LiveUpdateModel: Mappable {
+    var delegate: LiveUpdateModelDelegate?
     
+    required init?(map: Map) {}
+    func mapping(map: Map) {}
+}
+
+protocol LiveUpdateModelDelegate {
+    func dataUpdated()
+}
+
+class UserModel: LiveUpdateModel {
     struct Keys {
         static let identifier = "identifier"
         static let x = "x"
@@ -20,21 +30,26 @@ class UserModel: Mappable {
     
     // MARK: Private Properties
     
-    private(set) var identifier: String?
-    private(set) var x: String?
-    private(set) var y: String?
-    private(set) var timestamp: String?
+    var identifier: String?
+    var x: String?
+    var y: String?
+    var timestamp: String?
+    var color: UIColor! = .white
     
     // MARK: Init Methods & Superclass Overriders
     
     required init?(map: Map) {
+        super.init(map: map)
+        
         identifier <- map[Keys.identifier]
         x <- map[Keys.x]
         y <- map[Keys.y]
         timestamp <- map[Keys.timestamp]
     }
     
-     func mapping(map: Map) {        
+    override func mapping(map: Map) {
+        super.mapping(map: map)
+        
         identifier <- map[Keys.identifier]
         x <- map[Keys.x]
         y <- map[Keys.y]
