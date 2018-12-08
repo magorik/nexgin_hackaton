@@ -18,18 +18,13 @@ class ViewController: UIViewController {
         return true
     }
     
-    let image = UIView(frame: CGRect(x: 10, y: 300, width: 20, height: 20))
+    var images: [String: UIImageView] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        image.layer.cornerRadius = 10
-        image.clipsToBounds = false
-        image.backgroundColor = .green
-        
         scrollView.contentSize.width = 1000
-        scrollView.addSubview(image)
+        SocketManager.shared.delegate = self
         
         stratTimer()
     }
@@ -39,14 +34,52 @@ class ViewController: UIViewController {
             let x = arc4random()%100 + 500
             let y = arc4random()%100 + 500
             
-            UIView.animate(withDuration: 0.3, animations: {
-                self.image.frame = CGRect(x: CGFloat(x), y: CGFloat(y), width: 20, height: 20)
-                self.gridView.gridWidthMultiple = CGFloat(5 + arc4random()%10)
-                self.gridView.gridHeightMultiple = self.gridView.gridWidthMultiple
-                self.gridView.setNeedsDisplay()
-    
-            })
+//            UIView.animate(withDuration: 0.3, animations: {
+//
+//                self.gridView.gridWidthMultiple = CGFloat(5 + arc4random()%10)
+//                self.gridView.gridHeightMultiple = self.gridView.gridWidthMultiple
+//                self.gridView.setNeedsDisplay()
+//            })
         }.fire()
+    }
+    
+    private func addImage(x: CGFloat, y: CGFloat, identifier: String) {
+        if let image = images[identifier] {
+            UIView.animate(withDuration: 2.3, animations: {
+                image.frame = CGRect(x: x , y: y , width: 20, height: 20)
+            })
+        } else {
+            let image = UIImageView(frame: CGRect(x: x, y: y, width: 20, height: 20))
+            image.layer.cornerRadius = 10
+            image.clipsToBounds = false
+            image.backgroundColor = .random()
+            
+            images[identifier] = image
+            scrollView.addSubview(image)
+        }
+    }
+}
+
+extension CGFloat {
+    static func random() -> CGFloat {
+        return CGFloat(arc4random()) / CGFloat(UInt32.max)
+    }
+}
+
+extension UIColor {
+    static func random() -> UIColor {
+        return UIColor(red:   .random(),
+                       green: .random(),
+                       blue:  .random(),
+                       alpha: 1.0)
+    }
+}
+
+extension ViewController: SocketManagerProtocol {
+    func didRecieveObjects(objects: [UserModel]) {
+        for object in objects {
+            addImage(x: CGFloat(Float(object.x!)!), y: CGFloat(Float(object.y!)!), identifier: object.identifier!)
+        }
     }
 }
 

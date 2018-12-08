@@ -7,8 +7,17 @@
 
 import SocketIO
 import Starscream
+import ObjectMapper
+import SwiftyJSON
+
+protocol SocketManagerProtocol {
+    func didRecieveObjects(objects: [UserModel])
+}
 
 class SocketManager:WebSocketDelegate {
+    
+    var delegate: SocketManagerProtocol?
+    
     func websocketDidConnect(socket: WebSocketClient) {
         
     }
@@ -18,6 +27,23 @@ class SocketManager:WebSocketDelegate {
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
+        let rawData = text.data(using: .utf8)
+        
+        do {
+            let parsedData = try JSONSerialization.jsonObject(with: rawData!) as! [String:Any]
+            if let array = parsedData["message"] as? [[String:Any]] {
+                let objects =  Mapper<UserModel>().mapArray(JSONObject: array)
+                //                let objects = Mapper<UserModel>().mapArray(JSONArray: arr)
+                if let delegate = delegate {
+                    delegate.didRecieveObjects(objects: objects!)
+                }
+            }
+
+        } catch {
+            
+        }
+
+        
         
     }
     

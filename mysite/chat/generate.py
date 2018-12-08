@@ -5,11 +5,11 @@ Created on Sat Dec  8 15:21:22 2018
 @author: plotb
 """
 
+import user_struct
 import random as rnd
 from datetime import datetime
 import numpy as np
 import time
-import user_struct
 
 
 def generate_points(count, maximum_range_float):
@@ -21,7 +21,7 @@ def generate_points(count, maximum_range_float):
         #result_array = np.append(result_array, [result], axis=count)
         system_time = time.time()
         user_dic[line] = user_struct.user(line, rnd.uniform(0, maximum_range_float), rnd.uniform(0, maximum_range_float), system_time)
-        print(user_dic[line].to_json())
+        #print(user_dic[line].to_json())
     print (datetime.now() - time_a)
     return user_dic
 

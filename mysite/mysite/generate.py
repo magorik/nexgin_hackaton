@@ -5,11 +5,11 @@ Created on Sat Dec  8 15:21:22 2018
 @author: plotb
 """
 
+import user_struct
 import random as rnd
 from datetime import datetime
 import numpy as np
 import time
-import user_struct
 
 
 def generate_points(count, maximum_range_float):
