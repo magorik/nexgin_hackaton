@@ -22,7 +22,7 @@ def generate_points(count, maximum_range_float):
         #print(result)
         #result_array = np.append(result_array, [result], axis=count)
         system_time = time.time()
-        user_dict[line] = user_struct.user(line, rnd.uniform(0, maximum_range_float), rnd.uniform(0, maximum_range_float), system_time)
+        user_dict[line] = user_struct.user(line, int(rnd.uniform(0, maximum_range_float)), int(rnd.uniform(0, maximum_range_float)), system_time)
         
         user_arr[line] = {
             "identifier": str(line),
@@ -53,7 +53,7 @@ def generate_timestap(user_dict, count, time_delay):
     return user_arr, user_dict
     
 def rand_float(minimum, maximum):
-    return minimum + (maximum - minimum) * rnd.random()
+    return int(minimum + (maximum - minimum) * rnd.random())
 
 
 

@@ -25,11 +25,20 @@ class MyThread(Thread):
             self.let_do()
 
     def let_do(self):
+        # 1.. gПросто точки и положение
+        
+        message = json.loads(self.chat_class._message)
+        path = self.get_path_from_message(message['path'])
+        
+        
+        
         if (self.users_in_thread == None):
             points, self.users_in_thread = generate.generate_points(25, 600)
         else :
             points, self.users_in_thread = generate.generate_timestap(self.users_in_thread, 25, 600)
-            
+        # 2.. Отображение оластей
+        
+        
         async_to_sync(self.chat_class.channel_layer.group_send)(
                 self.chat_class.room_group_name,
                 {
@@ -43,11 +52,16 @@ class MyThread(Thread):
                     # }
                 }
         )  
-        #for index,data in enumerate(np.random.randint(3, size=10000)):            
+        #for index,data in enumerate(np.random.randint(3, size=10000)):  
+        
+    def get_path_from_message(message):
+        path = message.split(',')
+        return [(path[0],path[1]),(path[2],path[3]),(path[4],path[5]),(path[6],path[7])]          
                     
 
 
 class ChatConsumer(WebsocketConsumer):
+    
     
 
     def connect(self):
@@ -83,7 +97,10 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-
+        
+        self._message = message
+        
+        
         # Send message to room group
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
