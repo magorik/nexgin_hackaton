@@ -1,0 +1,15 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'nexgin_ios' do
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for nexgin_ios
+  pod 'SwiftyJSON', '4.0.0-alpha.1'
+  pod 'Alamofire'
+  pod 'ObjectMapper'
+  pod 'Socket.IO-Client-Swift', '~> 13.3.0'
+  pod 'Starscream','~> 3.0.4'
+
+end
