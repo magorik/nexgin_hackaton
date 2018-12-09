@@ -19,7 +19,12 @@ class SocketManager:WebSocketDelegate {
     var delegate: SocketManagerProtocol?
     
     func websocketDidConnect(socket: WebSocketClient) {
+        let area = AreaObject(JSON: ["identifier": 1,
+                                     "status": "ok:",
+                                     "history": [true, false],
+                                     "path": "1,2,2,2,4,2,1,2"])
         
+        sendAreas(areas: [area!])
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
@@ -41,9 +46,20 @@ class SocketManager:WebSocketDelegate {
         } catch {
             
         }
-
+    }
+    
+    
+    func sendAreas(areas:[AreaObject]) {
+        let json = ["message": areas.toJSON()]
         
-        
+        if let theJSONData = try?  JSONSerialization.data(
+            withJSONObject: json,
+            options: .prettyPrinted
+            ),
+            let theJSONText = String(data: theJSONData,
+                                     encoding: String.Encoding.ascii) {
+            sock.write(string: theJSONText)
+        }
     }
     
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {

@@ -44,12 +44,28 @@ def generate_timestap(user_dict, count, time_delay):
         user_dict[line]._x = user_dict[line]._x + rand_float(-50.0, 50.0)
         user_dict[line]._y = user_dict[line]._y + rand_float(-55.0, 55.0)
         user_dict[line]._timestap = time_a
-        user_arr[line] = {
-            "identifier": str(line),
-            "x" : str(user_dict[line]._x),
-            "y" : str(user_dict[line]._y),
-            "timestamp": str(time_a),
-         }
+
+        area_obj = user_dict[line]._area
+            
+        try:
+            area_dict = []
+            for key,value in area_obj.items():
+                area_dict.append({
+                    "identifier": value._id
+                })
+            
+            # Добавляем новую обасть
+            user_arr[line] = {
+                "identifier": str(line),
+                "x": str(user_dict[line]._x),
+                "y": str(user_dict[line]._y),
+                "timestamp": str(time_a),
+                "areas": area_dict
+            }
+        except:
+            print(user_dict[line]._area)
+
+        
     return user_arr, user_dict
     
 def rand_float(minimum, maximum):
