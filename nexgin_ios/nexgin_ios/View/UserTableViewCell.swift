@@ -52,14 +52,15 @@ class UserTableViewCell: LiveUpdateCell {
         guard let user = user as? UserModel else {
             return
         }
-        
         model = user
         model?.delegate = self
         userNameLabel.text = user.identifier
         
         clasterIndicatorView.backgroundColor = user.color
-        xLabel.text = "x: " + String(Int(Float(user.x!)!))
-        yLabel.text = "y: " + String(Int(Float(user.y!)!))
+        xLabel.text = "x: " + user.x!
+        yLabel.text = "y: " + user.y!
+        
+        areaIndicatorView.isHidden = user.hidden
     }
     
     private func setStateFor(selected: Bool) {

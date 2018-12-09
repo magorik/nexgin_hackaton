@@ -21,7 +21,7 @@ class NGDynamicTable: NSObject {
     
     func cellIdentifier() -> String { return "" }
     
-    private var selectedIndexPath: IndexPath?
+    var selectedIndexPath: IndexPath?
 }
 
 extension NGDynamicTable: UITableViewDelegate, UITableViewDataSource {
@@ -48,7 +48,13 @@ extension NGDynamicTable: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedIndexPath = indexPath
+        
+        if let selectedIndexPath = selectedIndexPath, selectedIndexPath.row == indexPath.row {
+            self.selectedIndexPath = nil
+            tableView.deselectRow(at: indexPath, animated: true)
+        } else {
+            selectedIndexPath = indexPath
+        }
         
         tableView.beginUpdates()
         tableView.endUpdates()

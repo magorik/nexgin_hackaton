@@ -35,14 +35,14 @@ def generate_points(count, maximum_range_float):
     
     return user_arr, user_dict
 
-def generate_timestap(user_dict, count, time_delay):
+def generate_timestap(user_dict, count, time_delay, k):
     time_a = time.time()
     
     user_arr = {}
 
     for line in range(count):
-        user_dict[line]._x = user_dict[line]._x + rand_float(-50.0, 50.0)
-        user_dict[line]._y = user_dict[line]._y + rand_float(-55.0, 55.0)
+        user_dict[line]._x = user_dict[line]._x + rand_float(-20.0, 21.0)
+        user_dict[line]._y = user_dict[line]._y + rand_float(-20.0, 21.0)
         user_dict[line]._timestap = time_a
 
         area_obj = user_dict[line]._area
@@ -51,7 +51,8 @@ def generate_timestap(user_dict, count, time_delay):
             area_dict = []
             for key,value in area_obj.items():
                 area_dict.append({
-                    "identifier": value._id
+                    "identifier": value._id,
+                    "status": value._status
                 })
             
             # Добавляем новую обасть
@@ -60,7 +61,8 @@ def generate_timestap(user_dict, count, time_delay):
                 "x": str(user_dict[line]._x),
                 "y": str(user_dict[line]._y),
                 "timestamp": str(time_a),
-                "areas": area_dict
+                "areas": area_dict,
+                "k-means": str(k[line])
             }
         except:
             print(user_dict[line]._area)

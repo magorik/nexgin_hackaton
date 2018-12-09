@@ -82,7 +82,7 @@
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&lt;y&gt;" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VRS-Zz-Yzk">
-                                                                    <rect key="frame" x="188.5" y="40.5" width="21.5" height="14.5"/>
+                                                                    <rect key="frame" x="162" y="40.5" width="48" height="14.5"/>
                                                                     <color key="tintColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="14.5" id="1Vr-Ni-IuP"/>
@@ -117,10 +117,11 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&lt;x&gt;" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K1j-yh-R2g">
-                                                                    <rect key="frame" x="159" y="40.5" width="21.5" height="14.5"/>
+                                                                    <rect key="frame" x="106" y="40.5" width="48" height="14.5"/>
                                                                     <color key="tintColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="14.5" id="dKA-lR-Lpd"/>
+                                                                        <constraint firstAttribute="width" constant="48" id="mE9-qg-fsB"/>
                                                                     </constraints>
                                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11"/>
                                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -139,6 +140,7 @@
                                                                 <constraint firstAttribute="bottom" secondItem="K1j-yh-R2g" secondAttribute="bottom" constant="8" id="K0D-ij-Ng9"/>
                                                                 <constraint firstAttribute="bottom" secondItem="YqK-lt-mIP" secondAttribute="bottom" id="PHd-4h-Byo"/>
                                                                 <constraint firstItem="50r-aM-gzR" firstAttribute="top" secondItem="NzA-8A-4Jg" secondAttribute="top" constant="8" id="Rdc-wJ-0hw"/>
+                                                                <constraint firstItem="K1j-yh-R2g" firstAttribute="width" secondItem="VRS-Zz-Yzk" secondAttribute="width" id="Vqx-Ce-Mgw"/>
                                                                 <constraint firstItem="VRS-Zz-Yzk" firstAttribute="leading" secondItem="K1j-yh-R2g" secondAttribute="trailing" constant="8" id="YW9-XJ-asy"/>
                                                                 <constraint firstItem="YqK-lt-mIP" firstAttribute="top" secondItem="NzA-8A-4Jg" secondAttribute="top" id="ZfP-nY-b1e"/>
                                                                 <constraint firstItem="1YR-LS-uaY" firstAttribute="leading" secondItem="clT-0s-Tcr" secondAttribute="trailing" constant="8" id="aOj-Dk-ABK"/>
@@ -353,6 +355,7 @@
                                         <gestureRecognizers/>
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="haK-FA-2oD" appends="YES" id="11W-y9-59Y"/>
+                                            <outletCollection property="gestureRecognizers" destination="pe7-M7-FEi" appends="YES" id="YU4-wZ-pAw"/>
                                         </connections>
                                     </scrollView>
                                 </subviews>
@@ -700,7 +703,9 @@
                     </view>
                     <connections>
                         <outlet property="areaTableViewModel" destination="5Qa-Va-UW6" id="cYm-9l-HlQ"/>
+                        <outlet property="doubleTouches" destination="pe7-M7-FEi" id="fKT-Av-Nxu"/>
                         <outlet property="gridView" destination="jAW-hW-CYT" id="TXx-aG-rKK"/>
+                        <outlet property="oneTouches" destination="haK-FA-2oD" id="XLw-ZU-at1"/>
                         <outlet property="scrollView" destination="lRA-y1-jNG" id="h88-f5-nLx"/>
                         <outlet property="userTableViewModel" destination="mkh-6j-wjx" id="VUA-9N-a4z"/>
                     </connections>
@@ -712,9 +717,16 @@
                     </connections>
                 </customObject>
                 <customObject id="5Qa-Va-UW6" customClass="AreaTableViewModel" customModule="nexgin_ios" customModuleProvider="target"/>
-                <tapGestureRecognizer id="haK-FA-2oD">
+                <tapGestureRecognizer delaysTouchesEnded="NO" numberOfTapsRequired="2" id="pe7-M7-FEi">
+                    <connections>
+                        <action selector="removeView:" destination="BYZ-38-t0r" id="Io7-rQ-YUg"/>
+                        <outlet property="delegate" destination="BYZ-38-t0r" id="maj-lq-uG9"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer delaysTouchesBegan="YES" id="haK-FA-2oD">
                     <connections>
                         <action selector="didTouchOnScroll:" destination="BYZ-38-t0r" id="RGV-zE-w9E"/>
+                        <outlet property="delegate" destination="BYZ-38-t0r" id="40L-o2-tUk"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

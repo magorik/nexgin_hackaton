@@ -38,7 +38,7 @@ class SocketManager:WebSocketDelegate {
             let parsedData = try JSONSerialization.jsonObject(with: rawData!) as! [String:Any]
             if let array = parsedData["message"] as? [String:[String: Any]] {
                 let objects =  Mapper<UserModel>().mapDictionary(JSON: array)
-                if let delegate = delegate {
+                if let delegate = delegate {                    
                     delegate.didRecieveObjects(objects: objects!)
                 }
             }

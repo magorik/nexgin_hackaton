@@ -20,15 +20,20 @@ class AreaObject: Mappable {
     // MARK: Private Properties
     
     var identifier: Int?
-    var status: String?
+    var status: Int? 
+    var hidden: Bool = true
     var history: [Bool]?
     var path: String?
-    
+    var view: UIImageView?
+
     // MARK: Init Methods & Superclass Overriders
     
     required init?(map: Map) {        
         identifier <- map[Keys.identifier]
         status <- map[Keys.status]
+        if let status = status, status == 3 {
+            
+        }
         path <- map[Keys.path]
         history <- map[Keys.history]
     }
@@ -38,5 +43,9 @@ class AreaObject: Mappable {
         status <- map[Keys.status]
         path <- map[Keys.path]
         history <- map[Keys.history]
+        
+        if let status = status, status == 3 {
+            
+        }
     }
 }

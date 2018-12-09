@@ -8,10 +8,22 @@
 
 import UIKit
 
+protocol UserTableViewModelDelegate {
+    func didSelected(indexptah:IndexPath?)
+}
+
 class UserTableViewModel: NGDynamicTable {
 
+    var delegate: UserTableViewModelDelegate?
+    
     override func cellIdentifier() -> String {
         return CellIdentifier.user
+    }
+    
+    override var selectedIndexPath: IndexPath? {
+        didSet {
+            delegate?.didSelected(indexptah: selectedIndexPath)
+        }
     }
     
     // MARK: Private Properties

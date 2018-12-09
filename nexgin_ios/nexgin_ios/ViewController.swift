@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet var oneTouches: UITapGestureRecognizer!
+    @IBOutlet var doubleTouches: UITapGestureRecognizer!
     @IBOutlet var userTableViewModel: UserTableViewModel!
     @IBOutlet var areaTableViewModel: AreaTableViewModel!
 
@@ -21,20 +23,30 @@ class ViewController: UIViewController {
         return true
     }
     
-    var images: [String: UIImageView] = [:]
+    
+    
+    var images: [String: UIView] = [:]
+    var labels: [String: UILabel] = [:]
+
     var areas: [AreaObject] = []
+    var areaViews: [UIImageView] = []
+    var selectedIndex: IndexPath?
+    
+    var colors: [UIColor] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         scrollView.contentSize.width = 1000
         scrollView.contentSize.height = 1000
-
-        scrollView.minimumZoomScale = 0.5
-        scrollView.minimumZoomScale = 1.0
+        
+        _ = (0...14).map({
+            $0.description
+            colors.append(.random())
+        })
 
         SocketManager.shared.delegate = self
-        
+        userTableViewModel.delegate = self
         stratTimer()
     }
     
@@ -53,18 +65,42 @@ class ViewController: UIViewController {
     }
     
     private func addImage(x: CGFloat, y: CGFloat, identifier: String, color: UIColor) {
-        if let image = images[identifier] {
-            UIView.animate(withDuration: 2.3, animations: {
+        if let image = images[identifier], let label = labels[identifier] {
+           UIView.animate(withDuration: 1.9, animations: {
                 image.frame = CGRect(x: x , y: y , width: 20, height: 20)
-            })
+                label.frame  = CGRect(x: x , y: y , width: 20, height: 20)
+            
+                image.backgroundColor = color
+           })
+            
+
+            if let selectedIndex = selectedIndex {
+                if identifier == String(selectedIndex.row) {
+                    image.alpha = 1
+                } else {
+                    image.alpha = 0
+                }
+            } else {
+                image.alpha = 1
+            }
         } else {
-            let image = UIImageView(frame: CGRect(x: x, y: y, width: 20, height: 20))
+            let image = UIView(frame: CGRect(x: x, y: y, width: 20, height: 20))
             image.layer.cornerRadius = 10
             image.clipsToBounds = false
             image.backgroundColor = color
             
+            
+            let label = UILabel(frame: image.frame)
+            label.text = identifier
+            label.textColor = .white
+            label.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
+            label.textAlignment = .center
+            
+            labels[identifier] = label
             images[identifier] = image
             scrollView.addSubview(image)
+            scrollView.addSubview(label)
+
         }
     }
     
@@ -74,24 +110,86 @@ class ViewController: UIViewController {
         }
 
             let point = sender.location(in: sender.view)
-            
-            print(point.x)
-            // again, point.x and point.y have the coordinates
+
         let width:CGFloat = 200.0
-        let view = UIView(frame: CGRect(x: point.x - CGFloat(width/2), y: point.y - CGFloat(width/2), width: width, height: width))
+        let view = UIImageView(frame: CGRect(x: point.x - CGFloat(width/2), y: point.y - CGFloat(width/2), width: width, height: width))
         view.clipsToBounds = false
         view.layer.cornerRadius = width/2
-        view.backgroundColor = .lightGray
-        view.alpha = 0.3
-
+        view.image = UIImage(named: "area")
+        view.alpha = 0.6
+        view.contentMode = .scaleAspectFit
+        
+        var pointg = view.center
+        
+        let path = "\(pointg.x),\(pointg.y),\(pointg.x ),\(pointg.y + width),\(pointg.x + width),\(pointg.y + width),\(pointg.x + width),\(pointg.y)"
+        let area = AreaObject(JSON: ["identifier": areaViews.count,
+                                     "status": "ok:",
+                                     "path": path])
+        area?.view = view
+        areas.append(area!)
+        areaViews.append(view)
+        
+        SocketManager.shared.sendAreas(areas: areas)
         scrollView.addSubview(view)
         scrollView.sendSubviewToBack(view)
+        
+        didRecieveObjects(objects: userTableViewModel.data! as! [String : UserModel])
+        
+        
+        areaTableViewModel.data
     }
+    
+    @IBAction func removeView(_ sender: Any) {
+        guard let sender = sender as? UIGestureRecognizer else {
+            return
+        }
+
+        let point = sender.location(in: sender.view)
+        let view = scrollView.hitTest(point, with: nil)
+        if let view = view, areaViews.contains(view as! UIImageView) {
+            view.removeFromSuperview()
+            
+            let index = areaViews.firstIndex(of: view as! UIImageView)!
+            areaViews.remove(at: index)
+            areas.remove(at: index)
+            SocketManager.shared.sendAreas(areas: areas)
+        }
+    }
+    
     @IBAction func reconnect(_ sender: Any) {
         SocketManager.shared.connect()
     }
 }
 
+extension ViewController: UserTableViewModelDelegate {
+    func didSelected(indexptah: IndexPath?) {
+        if var selectedIndex = selectedIndex, let indexptah = indexptah, selectedIndex.row == indexptah.row {
+            self.selectedIndex = nil
+        } else {
+            selectedIndex = indexptah
+        }
+        
+        didRecieveObjects(objects: userTableViewModel.data! as! [String : UserModel])
+    }
+}
+
+extension ViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        
+        return false
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        // Don't recognize a single tap until a double-tap fails.
+        if gestureRecognizer == self.oneTouches &&
+            otherGestureRecognizer == self.doubleTouches {
+            return true
+        }
+        return false
+    }
+}
 extension CGFloat {
     static func random() -> CGFloat {
         return CGFloat(arc4random()) / CGFloat(UInt32.max)
@@ -117,6 +215,22 @@ extension ViewController: SocketManagerProtocol {
                     existingObject.x = value.x
                     existingObject.y = value.y
                     existingObject.delegate?.dataUpdated()
+                    existingObject.areas = value.areas
+                    
+                    
+                    if let color = value.means {
+                        existingObject.color = colors[Int(color)!]
+                    }
+                    
+                    for area in areas {
+                        if let image = images[existingObject.identifier!] {
+                            //let frame = area.view!.convert(area.view!.frame, to: self.scrollView)
+                            //let point = image.convert(image.frame.origin, to: self.scrollView)
+                            
+                            
+                            existingObject.hidden = !area.view!.frame.contains(image.center)
+                        }
+                    }
                     
                     addImage(x: CGFloat(Float(value.x!)!), y: CGFloat(Float(value.y!)!), identifier: value.identifier!, color: (existingObject.color)!)
                 }

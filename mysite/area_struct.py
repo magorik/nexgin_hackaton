@@ -17,7 +17,7 @@ status_map = {(True, True):1, #остался
 class area_struct:
     def __init__(self, message, id):
         self._id = id
-        self._status = ''
+        self._status = 1
         self._history = [False, False]
         pathString = message.split(',')
         self._path = path.Path([(pathString[0],pathString[1]),(pathString[2],pathString[3]),(pathString[4],pathString[5]),(pathString[6],pathString[7])])        
@@ -28,8 +28,8 @@ class area_struct:
     def changing_includes(self, value):
         self._history[0] = self._history[1]
         self._history[1] = value
+        print("Status =================")
+        print(value)
         self._status = status_map[(bool(self._history[0]), bool(self._history[1]))]
-
-    def to_json(self):
-        return json.dumps(self)
+        print(self._status)
         

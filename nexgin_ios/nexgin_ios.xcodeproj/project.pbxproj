@@ -94,9 +94,9 @@
 		04E1161F21BB71ED00168876 = {
 			isa = PBXGroup;
 			children = (
-				0493291421BC6D3D0090AC4D /* NGDynamicTable.swift */,
 				04BF767621BBCC400038CDC5 /* SocketIOManager.swift */,
 				04BF766E21BB87530038CDC5 /* NGExtensions.swift */,
+				0493291421BC6D3D0090AC4D /* NGDynamicTable.swift */,
 				04BF766821BB7F5B0038CDC5 /* UserTableViewModel.swift */,
 				04BF766A21BB819A0038CDC5 /* AreaTableViewModel.swift */,
 				04E1162A21BB71ED00168876 /* nexgin_ios */,
