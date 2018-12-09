@@ -29,6 +29,8 @@ class UserTableViewCell: LiveUpdateCell {
     @IBOutlet weak var clasterIndicatorView: UIView!
     @IBOutlet weak var areaIndicatorView: UIView!
     @IBOutlet weak var infoButton: UIButton!
+    @IBOutlet weak var xLabel: UILabel!
+    @IBOutlet weak var yLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -53,7 +55,11 @@ class UserTableViewCell: LiveUpdateCell {
         
         model = user
         model?.delegate = self
-        userNameLabel.text = user.x
+        userNameLabel.text = user.identifier
+        
+        clasterIndicatorView.backgroundColor = user.color
+        xLabel.text = "x: " + String(Int(Float(user.x!)!))
+        yLabel.text = "y: " + String(Int(Float(user.y!)!))
     }
     
     private func setStateFor(selected: Bool) {
@@ -71,6 +77,8 @@ class UserTableViewCell: LiveUpdateCell {
         
         userNameLabel.textColor = color
         infoButton.tintColor = color
+        xLabel.textColor = color
+        yLabel.textColor = color
         
         shadowView.shadowColor = selected ? UIColor.hexStringToUIColor(hex: "8463C8") : UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
     }

@@ -22,12 +22,14 @@ class ViewController: UIViewController {
     }
     
     var images: [String: UIImageView] = [:]
+    var areas: [AreaObject] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         scrollView.contentSize.width = 1000
-        
+        scrollView.contentSize.height = 1000
+
         scrollView.minimumZoomScale = 0.5
         scrollView.minimumZoomScale = 1.0
 
@@ -65,6 +67,29 @@ class ViewController: UIViewController {
             scrollView.addSubview(image)
         }
     }
+    
+    @IBAction func didTouchOnScroll(_ sender: Any) {
+        guard let sender = sender as? UIGestureRecognizer else {
+            return
+        }
+
+            let point = sender.location(in: sender.view)
+            
+            print(point.x)
+            // again, point.x and point.y have the coordinates
+        let width:CGFloat = 200.0
+        let view = UIView(frame: CGRect(x: point.x - CGFloat(width/2), y: point.y - CGFloat(width/2), width: width, height: width))
+        view.clipsToBounds = false
+        view.layer.cornerRadius = width/2
+        view.backgroundColor = .lightGray
+        view.alpha = 0.3
+
+        scrollView.addSubview(view)
+        scrollView.sendSubviewToBack(view)
+    }
+    @IBAction func reconnect(_ sender: Any) {
+        SocketManager.shared.connect()
+    }
 }
 
 extension CGFloat {
@@ -91,7 +116,6 @@ extension ViewController: SocketManagerProtocol {
                 if let existingObject = userTableViewModel.data?[key] as? UserModel {
                     existingObject.x = value.x
                     existingObject.y = value.y
-                    existingObject.color = .random()
                     existingObject.delegate?.dataUpdated()
                     
                     addImage(x: CGFloat(Float(value.x!)!), y: CGFloat(Float(value.y!)!), identifier: value.identifier!, color: (existingObject.color)!)

@@ -26,6 +26,7 @@ class UserModel: LiveUpdateModel {
         static let x = "x"
         static let y = "y"
         static let timestamp = "timestamp"
+        static let areas = "areas"
     }
     
     // MARK: Private Properties
@@ -34,8 +35,9 @@ class UserModel: LiveUpdateModel {
     var x: String?
     var y: String?
     var timestamp: String?
-    var color: UIColor! = .white
-    
+    var color: UIColor! = .random()
+    var areas: [AreaObject]?
+
     // MARK: Init Methods & Superclass Overriders
     
     required init?(map: Map) {
@@ -45,6 +47,10 @@ class UserModel: LiveUpdateModel {
         x <- map[Keys.x]
         y <- map[Keys.y]
         timestamp <- map[Keys.timestamp]
+        areas <- map[Keys.areas]
+        if let areas = areas {
+            
+        }
     }
     
     override func mapping(map: Map) {
@@ -54,5 +60,10 @@ class UserModel: LiveUpdateModel {
         x <- map[Keys.x]
         y <- map[Keys.y]
         timestamp <- map[Keys.timestamp]
+        areas <- map[Keys.areas]
+        
+        if let areas = areas {
+            
+        }
     }
 }

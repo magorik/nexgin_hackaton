@@ -10,6 +10,8 @@ import random
 import time
 import generate
 import user_struct
+import area_struct
+import check_area
 
 class MyThread(Thread):
     def __init__(self, event, chat):
@@ -26,19 +28,21 @@ class MyThread(Thread):
 
     def let_do(self):
         # 1.. gПросто точки и положение
-        
-        message = json.loads(self.chat_class._message)
-        path = self.get_path_from_message(message['path'])
-        
-        
+
+        areas = []
+        for diction in self.chat_class._message:
+            area = area_struct.area_struct(diction['path'],diction['identifier'])
+            areas.append(area)
         
         if (self.users_in_thread == None):
             points, self.users_in_thread = generate.generate_points(25, 600)
         else :
+            self.users_in_thread = check_area.check_square_area(areas[0], self.users_in_thread)
             points, self.users_in_thread = generate.generate_timestap(self.users_in_thread, 25, 600)
         # 2.. Отображение оластей
         
         
+
         async_to_sync(self.chat_class.channel_layer.group_send)(
                 self.chat_class.room_group_name,
                 {
@@ -54,9 +58,7 @@ class MyThread(Thread):
         )  
         #for index,data in enumerate(np.random.randint(3, size=10000)):  
         
-    def get_path_from_message(message):
-        path = message.split(',')
-        return [(path[0],path[1]),(path[2],path[3]),(path[4],path[5]),(path[6],path[7])]          
+          
                     
 
 
@@ -81,10 +83,6 @@ class ChatConsumer(WebsocketConsumer):
         
         self.accept()
 
-    def callback(self):
-        print("x")
-        
-    
 
     def disconnect(self, close_code):
         # Leave room group

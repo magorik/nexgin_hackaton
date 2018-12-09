@@ -28,20 +28,20 @@ import area_struct
 #print(datetime.now() - time)
 #print(p.contains_points([(.5, .5)]))
 
-def check_square_area(our_path, area_id, points, dict_range):
-    area = area_struct(path.Patn(our_path))
-    area._id = area_id
-    
-    for user_id in range (1, dict_range):
+def check_square_area(area, points):
+    area_id = area._id
+
+    for user_id in range (1, len(points)):
         user = points[user_id]
         
-        status = check_area(area, float(points[user]._x), float(points[user]._y))
+        status = check_area(area._path, float(user._x), float(user._y))
         
-        
-        if user._area[area_id] == None:
+        try:
+            user._area[area_id]
             # Добавляем новую обасть
+        except:
             user._area[area_id] = area
-            
+
         user._area[area_id].changing_includes(status)
         
         #points[user]._true_true = str(bool(bool(points[user-1]._area_status) & bool(points[user]._area_status))) #остался в зоне
@@ -51,7 +51,7 @@ def check_square_area(our_path, area_id, points, dict_range):
     return points
         
 def check_area(area, x, y):
-    return area.contain_points([x, y])
+    return area.contains_points([(x, y)])
 
 
 

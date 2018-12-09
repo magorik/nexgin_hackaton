@@ -13,7 +13,9 @@ class user:
         self._x = x
         self._y = y
         self._timestap = timestap
-        self._area
+        self._area = {}
         
     def to_json(self):
         return json.dumps(self)
+
+     
