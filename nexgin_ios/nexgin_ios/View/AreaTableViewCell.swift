@@ -33,7 +33,7 @@ class AreaTableViewCell: LiveUpdateCell {
     }
     
     override func setupWith(user: LiveUpdateModel?) {
-        guard let user = user as? UserModel else {
+        guard let user = user as? AreaObject else {
             return
         }
         
@@ -41,6 +41,7 @@ class AreaTableViewCell: LiveUpdateCell {
         model?.delegate = self
         areaNameLabel.text = "Область #"
         areaColorView.backgroundColor = .green
+        countLabel.text = String(user.personCount)
     }
     
     private func setStateFor(selected: Bool) {

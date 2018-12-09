@@ -11,7 +11,7 @@ import UIKit
 class NGDynamicTable: NSObject {
     @IBOutlet var tableView: UITableView!
     
-    var data: [String: LiveUpdateModel]? {
+    var data: [String: LiveUpdateModel] = [:] {
         didSet {
             if oldValue == nil {
                 tableView.reloadData()
@@ -26,19 +26,15 @@ class NGDynamicTable: NSObject {
 
 extension NGDynamicTable: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let data = data else {
-            return 0
-        }
         
         return data.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier()) as! UserTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier()) as! LiveUpdateCell
         
-        if let data = data {
-            cell.setupWith(user: data[String(indexPath.row)])
-        }
+        cell.setupWith(user: data[String(indexPath.row)])
+
         
         return cell
     }
@@ -60,18 +56,14 @@ extension NGDynamicTable: UITableViewDelegate, UITableViewDataSource {
         tableView.endUpdates()
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let data = data else {
-            return
-        }
-        
-        let cell = cell as! UserTableViewCell
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {        
+        let cell = cell as! LiveUpdateCell
         cell.model = data[String(indexPath.row)]
     }
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
-        let cell = cell as! UserTableViewCell
+        let cell = cell as! LiveUpdateCell
         cell.model?.delegate = nil
         cell.model = nil
     }

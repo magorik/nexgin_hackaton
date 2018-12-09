@@ -29,7 +29,7 @@ class ViewController: UIViewController {
     var labels: [String: UILabel] = [:]
 
     var areas: [AreaObject] = []
-    var areaViews: [UIImageView] = []
+    var areaViews: [UIView] = []
     var selectedIndex: IndexPath?
     
     var colors: [UIColor] = []
@@ -44,24 +44,16 @@ class ViewController: UIViewController {
             $0.description
             colors.append(.random())
         })
-
+        areaTableViewModel.data = [:]
+                
         SocketManager.shared.delegate = self
         userTableViewModel.delegate = self
+        
         stratTimer()
     }
     
     func stratTimer() {
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (timer) in
-            let x = arc4random()%100 + 500
-            let y = arc4random()%100 + 500
-            
-//            UIView.animate(withDuration: 0.3, animations: {
-//
-//                self.gridView.gridWidthMultiple = CGFloat(5 + arc4random()%10)
-//                self.gridView.gridHeightMultiple = self.gridView.gridWidthMultiple
-//                self.gridView.setNeedsDisplay()
-//            })
-        }.fire()
+
     }
     
     private func addImage(x: CGFloat, y: CGFloat, identifier: String, color: UIColor) {
@@ -83,6 +75,8 @@ class ViewController: UIViewController {
             } else {
                 image.alpha = 1
             }
+            
+            label.alpha = image.alpha
         } else {
             let image = UIView(frame: CGRect(x: x, y: y, width: 20, height: 20))
             image.layer.cornerRadius = 10
@@ -112,17 +106,29 @@ class ViewController: UIViewController {
             let point = sender.location(in: sender.view)
 
         let width:CGFloat = 200.0
-        let view = UIImageView(frame: CGRect(x: point.x - CGFloat(width/2), y: point.y - CGFloat(width/2), width: width, height: width))
+        let view = UIView(frame: CGRect(x: point.x - CGFloat(width/2), y: point.y - CGFloat(width/2), width: width, height: width))
         view.clipsToBounds = false
-        view.layer.cornerRadius = width/2
-        view.image = UIImage(named: "area")
+        //view.layer.cornerRadius = width/2
+        //view.image = UIImage(named: "area")
         view.alpha = 0.6
-        view.contentMode = .scaleAspectFit
+        
+        view.backgroundColor = .clear
+        
+        let borderLayer = CAShapeLayer.init()
+        borderLayer.lineWidth = 2.0
+        borderLayer.fillColor = UIColor.green.cgColor
+        borderLayer.strokeColor = UIColor.gray.cgColor
+        borderLayer.backgroundColor = UIColor.blue.cgColor
+        borderLayer.lineDashPattern = [6, 4]
+        borderLayer.frame = view.bounds
+        borderLayer.path = UIBezierPath.init(rect: view.bounds).cgPath
+        
+        view.layer.addSublayer(borderLayer)
         
         var pointg = view.center
         
         let path = "\(pointg.x),\(pointg.y),\(pointg.x ),\(pointg.y + width),\(pointg.x + width),\(pointg.y + width),\(pointg.x + width),\(pointg.y)"
-        let area = AreaObject(JSON: ["identifier": areaViews.count,
+        let area = AreaObject(JSON: ["identifier": areaViews.count - 1,
                                      "status": "ok:",
                                      "path": path])
         area?.view = view
@@ -133,10 +139,10 @@ class ViewController: UIViewController {
         scrollView.addSubview(view)
         scrollView.sendSubviewToBack(view)
         
-        didRecieveObjects(objects: userTableViewModel.data! as! [String : UserModel])
+        areaTableViewModel.data[String(areaViews.count - 1)] = area
+        areaTableViewModel.tableView.reloadData()
         
-        
-        areaTableViewModel.data
+        didRecieveObjects(objects: userTableViewModel.data as! [String : UserModel])
     }
     
     @IBAction func removeView(_ sender: Any) {
@@ -146,10 +152,10 @@ class ViewController: UIViewController {
 
         let point = sender.location(in: sender.view)
         let view = scrollView.hitTest(point, with: nil)
-        if let view = view, areaViews.contains(view as! UIImageView) {
+        if let view = view, areaViews.contains(view) {
             view.removeFromSuperview()
             
-            let index = areaViews.firstIndex(of: view as! UIImageView)!
+            let index = areaViews.firstIndex(of: view)!
             areaViews.remove(at: index)
             areas.remove(at: index)
             SocketManager.shared.sendAreas(areas: areas)
@@ -169,7 +175,7 @@ extension ViewController: UserTableViewModelDelegate {
             selectedIndex = indexptah
         }
         
-        didRecieveObjects(objects: userTableViewModel.data! as! [String : UserModel])
+        didRecieveObjects(objects: userTableViewModel.data as! [String : UserModel])
     }
 }
 
@@ -207,11 +213,14 @@ extension UIColor {
 
 extension ViewController: SocketManagerProtocol {
     func didRecieveObjects(objects: [String: UserModel]) {        
-        if userTableViewModel.data == nil {
+        if userTableViewModel.data.count == 0 {
            userTableViewModel.data = objects
+           userTableViewModel.tableView.reloadData()
         } else {
+            _ = areas.map({$0.personCount = 0})
+            
             for (key, value) in objects {
-                if let existingObject = userTableViewModel.data?[key] as? UserModel {
+                if let existingObject = userTableViewModel.data[key] as? UserModel {
                     existingObject.x = value.x
                     existingObject.y = value.y
                     existingObject.delegate?.dataUpdated()
@@ -227,14 +236,20 @@ extension ViewController: SocketManagerProtocol {
                             //let frame = area.view!.convert(area.view!.frame, to: self.scrollView)
                             //let point = image.convert(image.frame.origin, to: self.scrollView)
                             
-                            
                             existingObject.hidden = !area.view!.frame.contains(image.center)
+                            if !existingObject.hidden {
+                                area.personCount += 1
+                            }
+                            
+                            area.delegate?.dataUpdated()
                         }
                     }
                     
                     addImage(x: CGFloat(Float(value.x!)!), y: CGFloat(Float(value.y!)!), identifier: value.identifier!, color: (existingObject.color)!)
                 }
             }
+            
+            
         }
     }
 }

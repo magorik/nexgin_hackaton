@@ -9,7 +9,7 @@
 import UIKit
 import ObjectMapper
 
-class AreaObject: Mappable {
+class AreaObject: LiveUpdateModel {
     struct Keys {
         static let identifier = "identifier"
         static let status = "status"
@@ -24,11 +24,14 @@ class AreaObject: Mappable {
     var hidden: Bool = true
     var history: [Bool]?
     var path: String?
-    var view: UIImageView?
-
+    var view: UIView?
+    var personCount: Int = 0
+    
     // MARK: Init Methods & Superclass Overriders
     
-    required init?(map: Map) {        
+    required init?(map: Map) {
+        super.init(map: map)
+        
         identifier <- map[Keys.identifier]
         status <- map[Keys.status]
         if let status = status, status == 3 {
@@ -38,7 +41,8 @@ class AreaObject: Mappable {
         history <- map[Keys.history]
     }
     
-    func mapping(map: Map) {
+    override func mapping(map: Map) {
+        super.mapping(map: map)
         identifier <- map[Keys.identifier]
         status <- map[Keys.status]
         path <- map[Keys.path]

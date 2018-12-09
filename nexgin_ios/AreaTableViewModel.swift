@@ -9,7 +9,6 @@
 import UIKit
 
 class AreaTableViewModel: NGDynamicTable {
-    
     override func cellIdentifier() -> String {
         return CellIdentifier.area
     }
