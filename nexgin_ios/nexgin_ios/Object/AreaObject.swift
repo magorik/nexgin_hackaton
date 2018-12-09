@@ -8,6 +8,7 @@
 
 import UIKit
 import ObjectMapper
+import NotificationBannerSwift
 
 class AreaObject: LiveUpdateModel {
     struct Keys {
@@ -25,7 +26,17 @@ class AreaObject: LiveUpdateModel {
     var history: [Bool]?
     var path: String?
     var view: UIView?
-    var personCount: Int = 0
+    var personCount: Int = 0 {
+        didSet {
+            if personCount > 5, canShowAlert {
+                let banner = NotificationBanner(title: "Внимание!", subtitle: "Опасное скопление людей в зоне " + "#" + String(identifier! + 1), style: .danger)
+                canShowAlert = false
+                banner.show(bannerPosition: .top)
+            }
+        }
+    }
+    
+    private var canShowAlert = true
     
     // MARK: Init Methods & Superclass Overriders
     

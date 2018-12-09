@@ -11,6 +11,6 @@ target 'nexgin_ios' do
   pod 'ObjectMapper'
   pod 'Socket.IO-Client-Swift', '~> 13.3.0'
   pod 'Starscream','~> 3.0.4'
-  pod 'NotificationBannerSwift', '1.6.3'
+  pod 'NotificationBannerSwift'
 
 end

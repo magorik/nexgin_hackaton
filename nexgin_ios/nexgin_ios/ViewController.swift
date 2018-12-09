@@ -9,7 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     @IBOutlet var oneTouches: UITapGestureRecognizer!
     @IBOutlet var doubleTouches: UITapGestureRecognizer!
     @IBOutlet var userTableViewModel: UserTableViewModel!
@@ -30,24 +30,41 @@ class ViewController: UIViewController {
 
     var areas: [AreaObject] = []
     var areaViews: [UIView] = []
-    var selectedIndex: IndexPath?
+    var userSelectedIndex: IndexPath?
+    var areaSelectedIndex: IndexPath?
     
+    var areaSelectedView: UIView?
+
     var colors: [UIColor] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+   
         
         scrollView.contentSize.width = 1000
         scrollView.contentSize.height = 1000
         
-        _ = (0...14).map({
-            $0.description
-            colors.append(.random())
-        })
+        colors.append(UIColor.hexStringToUIColor(hex: "ef5350"))
+        colors.append(UIColor.hexStringToUIColor(hex: "f57f17"))
+        colors.append(UIColor.hexStringToUIColor(hex: "c63f17"))
+        colors.append(UIColor.hexStringToUIColor(hex: "5d4037"))
+        colors.append(UIColor.hexStringToUIColor(hex: "ec407a"))
+        colors.append(UIColor.hexStringToUIColor(hex: "ab47bc"))
+        colors.append(UIColor.hexStringToUIColor(hex: "7e57c2"))
+        colors.append(UIColor.hexStringToUIColor(hex: "5c6bc0"))
+        colors.append(UIColor.hexStringToUIColor(hex: "42a5f5"))
+        colors.append(UIColor.hexStringToUIColor(hex: "29b6f6"))
+        colors.append(UIColor.hexStringToUIColor(hex: "6ff9ff"))
+        colors.append(UIColor.hexStringToUIColor(hex: "64d8cb"))
+        colors.append(UIColor.hexStringToUIColor(hex: "ffff89"))
+        colors.append(UIColor.hexStringToUIColor(hex: "ffa726"))
+        colors.append(UIColor.hexStringToUIColor(hex: "a7c0cd"))
+        
         areaTableViewModel.data = [:]
                 
         SocketManager.shared.delegate = self
         userTableViewModel.delegate = self
+        areaTableViewModel.delegate = self
         
         stratTimer()
     }
@@ -66,7 +83,7 @@ class ViewController: UIViewController {
            })
             
 
-            if let selectedIndex = selectedIndex {
+            if let selectedIndex = userSelectedIndex {
                 if identifier == String(selectedIndex.row) {
                     image.alpha = 1
                 } else {
@@ -87,7 +104,7 @@ class ViewController: UIViewController {
             let label = UILabel(frame: image.frame)
             label.text = identifier
             label.textColor = .white
-            label.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
+            label.font = UIFont.systemFont(ofSize: 7, weight: .semibold)
             label.textAlignment = .center
             
             labels[identifier] = label
@@ -95,6 +112,14 @@ class ViewController: UIViewController {
             scrollView.addSubview(image)
             scrollView.addSubview(label)
 
+        }
+    }
+    
+    @IBAction func changeTransform(_ sender: UISlider) {
+        if let image = areaSelectedView {
+            UIView.animate(withDuration: 0.3) {
+                image.transform = CGAffineTransform(scaleX: CGFloat(1 + sender.value/2), y:  CGFloat(1 + sender.value/2))
+            }
         }
     }
     
@@ -106,7 +131,7 @@ class ViewController: UIViewController {
             let point = sender.location(in: sender.view)
 
         let width:CGFloat = 200.0
-        let view = UIView(frame: CGRect(x: point.x - CGFloat(width/2), y: point.y - CGFloat(width/2), width: width, height: width))
+        let view = NGView(frame: CGRect(x: point.x - CGFloat(width/2), y: point.y - CGFloat(width/2), width: width, height: width))
         view.clipsToBounds = false
         //view.layer.cornerRadius = width/2
         //view.image = UIImage(named: "area")
@@ -126,14 +151,15 @@ class ViewController: UIViewController {
         view.layer.addSublayer(borderLayer)
         
         var pointg = view.center
-        
+        areaViews.append(view)
         let path = "\(pointg.x),\(pointg.y),\(pointg.x ),\(pointg.y + width),\(pointg.x + width),\(pointg.y + width),\(pointg.x + width),\(pointg.y)"
         let area = AreaObject(JSON: ["identifier": areaViews.count - 1,
                                      "status": "ok:",
                                      "path": path])
+        
         area?.view = view
+        view.aera = area
         areas.append(area!)
-        areaViews.append(view)
         
         SocketManager.shared.sendAreas(areas: areas)
         scrollView.addSubview(view)
@@ -145,6 +171,24 @@ class ViewController: UIViewController {
         didRecieveObjects(objects: userTableViewModel.data as! [String : UserModel])
     }
     
+    var deidef = false {
+        didSet {
+            userSelectedIndex = deidef ? IndexPath(row: 100000, section: 10) : nil
+        }
+    }
+    
+    @IBAction func changeDeidentification(_ sender: Any) {
+        deidef = !deidef
+        UIView.animate(withDuration: 0.3) {
+            self.navigationController?.navigationBar.barTintColor = self.deidef ? .red : .white
+            self.navigationController?.navigationBar.tintColor = self.deidef ? .white : .black
+            self.navigationController?.navigationBar.titleTextAttributes = self.deidef ? [.foregroundColor: UIColor.white] : [.foregroundColor: UIColor.black]
+
+        }
+        
+        didRecieveObjects(objects: userTableViewModel.data as! [String : UserModel])
+    }
+    
     @IBAction func removeView(_ sender: Any) {
         guard let sender = sender as? UIGestureRecognizer else {
             return
@@ -152,13 +196,21 @@ class ViewController: UIViewController {
 
         let point = sender.location(in: sender.view)
         let view = scrollView.hitTest(point, with: nil)
-        if let view = view, areaViews.contains(view) {
+        if let view = view as? NGView, areaViews.contains(view) {
             view.removeFromSuperview()
             
             let index = areaViews.firstIndex(of: view)!
+            
+            areaTableViewModel.data[String(view.aera!.identifier!)] = nil
+            
+            areaTableViewModel.tableView.reloadData()
+            
             areaViews.remove(at: index)
-            areas.remove(at: index)
+            areas.remove(at: areas.firstIndex(where: {$0.identifier == view.aera!.identifier})!)
+            
             SocketManager.shared.sendAreas(areas: areas)
+            
+            
         }
     }
     
@@ -169,13 +221,31 @@ class ViewController: UIViewController {
 
 extension ViewController: UserTableViewModelDelegate {
     func didSelected(indexptah: IndexPath?) {
-        if var selectedIndex = selectedIndex, let indexptah = indexptah, selectedIndex.row == indexptah.row {
-            self.selectedIndex = nil
+        if var selectedIndex = userSelectedIndex, let indexptah = indexptah, selectedIndex.row == indexptah.row {
+            self.userSelectedIndex = nil
         } else {
-            selectedIndex = indexptah
+            userSelectedIndex = indexptah
         }
         
         didRecieveObjects(objects: userTableViewModel.data as! [String : UserModel])
+    }
+}
+
+extension ViewController: AreaTableViewModelDelegate {
+    func didSelect(indexptah: IndexPath?) {
+        if indexptah == nil {
+            self.areaSelectedIndex = nil
+            areaSelectedView = nil
+            //_ = areaViews.map({$0.alpha = 0.3})
+        } else {
+            areaSelectedIndex = indexptah
+            
+            let view = areaViews[(indexptah?.row)!]
+            scrollView.setContentOffset(CGPoint(x: view.center.x - view.frame.width, y: view.center.y - view.frame.height), animated: true)//scrollRectToVisible(view.frame, animated: true)
+            areaSelectedView = view
+            
+            //_ = areaViews.filter({$0 != view}).map({$0.alpha = 0})
+        }
     }
 }
 
@@ -196,6 +266,11 @@ extension ViewController: UIGestureRecognizerDelegate {
         return false
     }
 }
+
+class NGView: UIView {
+    var aera: AreaObject?
+}
+
 extension CGFloat {
     static func random() -> CGFloat {
         return CGFloat(arc4random()) / CGFloat(UInt32.max)
@@ -215,6 +290,7 @@ extension ViewController: SocketManagerProtocol {
     func didRecieveObjects(objects: [String: UserModel]) {        
         if userTableViewModel.data.count == 0 {
            userTableViewModel.data = objects
+            
            userTableViewModel.tableView.reloadData()
         } else {
             _ = areas.map({$0.personCount = 0})

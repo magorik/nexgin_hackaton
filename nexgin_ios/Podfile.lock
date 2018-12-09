@@ -1,6 +1,11 @@
 PODS:
   - Alamofire (4.8.0)
+  - MarqueeLabel/Swift (3.2.0)
+  - NotificationBannerSwift (1.8.0):
+    - MarqueeLabel/Swift (~> 3.2.0)
+    - SnapKit (~> 4.0.1)
   - ObjectMapper (3.4.1)
+  - SnapKit (4.0.1)
   - Socket.IO-Client-Swift (13.3.1):
     - Starscream (~> 3.0.2)
   - Starscream (3.0.6)
@@ -8,6 +13,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - NotificationBannerSwift
   - ObjectMapper
   - Socket.IO-Client-Swift (~> 13.3.0)
   - Starscream (~> 3.0.4)
@@ -16,18 +22,24 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
+    - MarqueeLabel
+    - NotificationBannerSwift
     - ObjectMapper
+    - SnapKit
     - Socket.IO-Client-Swift
     - Starscream
     - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: 3ec537f71edc9804815215393ae2b1a8ea33a844
+  MarqueeLabel: 440a502b91a9179bd98f9fff00ba1150650a1c0e
+  NotificationBannerSwift: 49fc4be7fabada55b189b50e72184c92edd5f7f7
   ObjectMapper: 5311bd50ca732930959e7ca1a2de43ab823a5ced
+  SnapKit: 0de968a9fec17499afa29683b05d0c775b6d1c29
   Socket.IO-Client-Swift: 79f8f85fa44881838175a20f9bd2c32bef2c9d37
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   SwiftyJSON: dc88934f85fb50b263b1632b9cbad3402505783e
 
-PODFILE CHECKSUM: 50dc7b9ee4668271eb10b9f9dfb8c4d9f58a36ae
+PODFILE CHECKSUM: 4f01e0fc6e8d950d0fb11d66a6061c66b8f3a65b
 
 COCOAPODS: 1.5.3

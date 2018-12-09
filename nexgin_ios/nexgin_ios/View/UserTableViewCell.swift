@@ -54,7 +54,7 @@ class UserTableViewCell: LiveUpdateCell {
         }
         model = user
         model?.delegate = self
-        userNameLabel.text = user.identifier
+        userNameLabel.text = "Пользователь #" + String(user.identifier!)
         
         clasterIndicatorView.backgroundColor = user.color
         xLabel.text = "x: " + user.x!

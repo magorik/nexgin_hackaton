@@ -59,9 +59,16 @@ class ShadowView: UIView {
         }
     }
     
+    @IBInspectable
+    var backColor: UIColor = .white {
+        didSet {
+            setShadow()
+        }
+    }
+    
     private func setShadow() {
         shadowLayer.path = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius).cgPath
-        shadowLayer.fillColor = UIColor.white.cgColor
+        shadowLayer.fillColor = backColor.cgColor
         
         shadowLayer.shadowColor = shadowColor.cgColor
         shadowLayer.shadowPath = shadowLayer.path

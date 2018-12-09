@@ -37,13 +37,13 @@ class MyThread(Thread):
             areas.append(area)
         
         if (self.users_in_thread == None):
-            points, self.users_in_thread = generate.generate_points(1000, 1000)
+            points, self.users_in_thread = generate.generate_points(500, 1000)
         else :
             self.users_in_thread = check_area.check_square_area(areas, self.users_in_thread)
             data = cluster.prepare_points(self.users_in_thread)
             res = cluster.get_clusters(data, 10)
             print(res)
-            points, self.users_in_thread = generate.generate_timestap(self.users_in_thread, 1000, 1000,res)
+            points, self.users_in_thread = generate.generate_timestap(self.users_in_thread, 500, 1000,res)
         # 2.. Отображение оластей
         
         
