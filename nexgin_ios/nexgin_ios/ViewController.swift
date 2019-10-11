@@ -66,12 +66,9 @@ class ViewController: UIViewController {
         userTableViewModel.delegate = self
         areaTableViewModel.delegate = self
         
-        stratTimer()
+        startTimer()
     }
-    
-    func stratTimer() {
 
-    }
     
     private func addImage(x: CGFloat, y: CGFloat, identifier: String, color: UIColor) {
         if let image = images[identifier], let label = labels[identifier] {
@@ -117,7 +114,7 @@ class ViewController: UIViewController {
     
     @IBAction func changeTransform(_ sender: UISlider) {
         if let image = areaSelectedView {
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: 0.0) {
                 image.transform = CGAffineTransform(scaleX: CGFloat(1 + sender.value/2), y:  CGFloat(1 + sender.value/2))
             }
         }
@@ -217,6 +214,39 @@ class ViewController: UIViewController {
     @IBAction func reconnect(_ sender: Any) {
         SocketManager.shared.connect()
     }
+    
+    private var timerTick = 0
+    private var timer: Timer?
+
+    private func startTimer() {
+        
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
+        timer?.fire()
+    }
+    
+    private func stopTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    @IBOutlet weak var timerLabel: UILabel!
+    var startDate = Date()
+    
+    @objc private func updateTime() {
+        timerTick += 1
+        
+        let difference = Date().timeIntervalSince(startDate)
+        
+        let date = Date(timeIntervalSince1970: Double(difference))
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone(identifier: "UTC")
+        formatter.dateFormat = "HH:mm:ss"
+        
+        let dateString = formatter.string(from: date)
+        
+        timerLabel.text = dateString
+        
+    }
 }
 
 extension ViewController: UserTableViewModelDelegate {
@@ -241,7 +271,7 @@ extension ViewController: AreaTableViewModelDelegate {
             areaSelectedIndex = indexptah
             
             let view = areaViews[(indexptah?.row)!]
-            scrollView.setContentOffset(CGPoint(x: view.center.x - view.frame.width, y: view.center.y - view.frame.height), animated: true)//scrollRectToVisible(view.frame, animated: true)
+            scrollView.setContentOffset(CGPoint(x: view.center.x - 1.8*view.frame.width, y: view.center.y - view.frame.height * 1.6), animated: true)//scrollRectToVisible(view.frame, animated: true)
             areaSelectedView = view
             
             //_ = areaViews.filter({$0 != view}).map({$0.alpha = 0})

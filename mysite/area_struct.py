@@ -28,8 +28,5 @@ class area_struct:
     def changing_includes(self, value):
         self._history[0] = self._history[1]
         self._history[1] = value
-        print("Status =================")
-        print(value)
         self._status = status_map[(bool(self._history[0]), bool(self._history[1]))]
-        print(self._status)
         

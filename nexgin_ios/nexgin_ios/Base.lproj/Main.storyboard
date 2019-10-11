@@ -801,8 +801,8 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:12" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xKr-7B-kG9">
-                                        <rect key="frame" x="150.5" y="159.5" width="52" height="21.5"/>
-                                        <fontDescription key="fontDescription" type="system" weight="black" pointSize="18"/>
+                                        <rect key="frame" x="138.5" y="159.5" width="76.5" height="31.5"/>
+                                        <fontDescription key="fontDescription" type="system" weight="black" pointSize="26"/>
                                         <color key="textColor" red="0.19894385340000001" green="0.1848677993" blue="0.56866264339999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -907,6 +907,7 @@
                         <outlet property="gridView" destination="jAW-hW-CYT" id="TXx-aG-rKK"/>
                         <outlet property="oneTouches" destination="haK-FA-2oD" id="XLw-ZU-at1"/>
                         <outlet property="scrollView" destination="lRA-y1-jNG" id="h88-f5-nLx"/>
+                        <outlet property="timerLabel" destination="xKr-7B-kG9" id="28Q-UU-pS9"/>
                         <outlet property="userTableViewModel" destination="mkh-6j-wjx" id="VUA-9N-a4z"/>
                     </connections>
                 </viewController>

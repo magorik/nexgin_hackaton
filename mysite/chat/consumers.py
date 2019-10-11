@@ -67,9 +67,6 @@ class MyThread(Thread):
 
 
 class ChatConsumer(WebsocketConsumer):
-    
-    
-
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
@@ -83,8 +80,8 @@ class ChatConsumer(WebsocketConsumer):
         
         stopFlag = Event()
         thread = MyThread(stopFlag, self)
-        thread.start()
-        
+#        thread.start()
+
         self.accept()
 
 
@@ -105,14 +102,14 @@ class ChatConsumer(WebsocketConsumer):
         print("Recieve new set")
         print(self._message)
 
-        # Send message to room group
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message
-            }
-        )
+#        # Send message to room group
+#        async_to_sync(self.channel_layer.group_send)(
+#            self.room_group_name,
+#            {
+#                'type': 'chat_message',
+#                'message': message
+#            }
+#        )
 
     # Receive message from room group
     def chat_message(self, event):

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		040679772259CE140045D9C8 /* Sock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 040679762259CE140045D9C8 /* Sock.swift */; };
+		0406797C2259E1ED0045D9C8 /* Robotic_Arm_03.obj in Resources */ = {isa = PBXBuildFile; fileRef = 0406797B2259E1ED0045D9C8 /* Robotic_Arm_03.obj */; };
 		043A8D4A21BB77B1009E671D /* RoundViewWithGradient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 043A8D4921BB77B1009E671D /* RoundViewWithGradient.swift */; };
 		0493291521BC6D3D0090AC4D /* NGDynamicTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493291421BC6D3D0090AC4D /* NGDynamicTable.swift */; };
 		0493291721BC81720090AC4D /* AreaObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0493291621BC81720090AC4D /* AreaObject.swift */; };
@@ -29,6 +31,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		040679762259CE140045D9C8 /* Sock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sock.swift; sourceTree = "<group>"; };
+		0406797A2259E12D0045D9C8 /* Rigged Hand_dae.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = "Rigged Hand_dae.scn"; sourceTree = "<group>"; };
+		0406797B2259E1ED0045D9C8 /* Robotic_Arm_03.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Robotic_Arm_03.obj; sourceTree = "<group>"; };
+		0406797F2259E7110045D9C8 /* Rmk3.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = Rmk3.scn; sourceTree = "<group>"; };
 		043A8D4621BB76FE009E671D /* Comfortaa-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comfortaa-Bold.ttf"; sourceTree = "<group>"; };
 		043A8D4721BB76FF009E671D /* Comfortaa-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comfortaa-Light.ttf"; sourceTree = "<group>"; };
 		043A8D4821BB76FF009E671D /* Comfortaa-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comfortaa-Regular.ttf"; sourceTree = "<group>"; };
@@ -94,6 +100,10 @@
 		04E1161F21BB71ED00168876 = {
 			isa = PBXGroup;
 			children = (
+				0406797A2259E12D0045D9C8 /* Rigged Hand_dae.scn */,
+				0406797B2259E1ED0045D9C8 /* Robotic_Arm_03.obj */,
+				0406797F2259E7110045D9C8 /* Rmk3.scn */,
+				040679762259CE140045D9C8 /* Sock.swift */,
 				04BF767621BBCC400038CDC5 /* SocketIOManager.swift */,
 				04BF766E21BB87530038CDC5 /* NGExtensions.swift */,
 				0493291421BC6D3D0090AC4D /* NGDynamicTable.swift */,
@@ -211,6 +221,7 @@
 			files = (
 				04E1163621BB71EE00168876 /* LaunchScreen.storyboard in Resources */,
 				04E1163321BB71EE00168876 /* Assets.xcassets in Resources */,
+				0406797C2259E1ED0045D9C8 /* Robotic_Arm_03.obj in Resources */,
 				04E1163121BB71ED00168876 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -288,6 +299,7 @@
 				04BF766F21BB87530038CDC5 /* NGExtensions.swift in Sources */,
 				04BF767321BB926A0038CDC5 /* HoshiTextField.swift in Sources */,
 				04BF767221BB926A0038CDC5 /* TextFieldEffects.swift in Sources */,
+				040679772259CE140045D9C8 /* Sock.swift in Sources */,
 				04E1163E21BB73E000168876 /* ShadowView.swift in Sources */,
 				04E1162E21BB71ED00168876 /* ViewController.swift in Sources */,
 				04E1162C21BB71ED00168876 /* AppDelegate.swift in Sources */,
@@ -454,7 +466,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.george.app.nexgin-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -473,7 +485,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.george.app.nexgin-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

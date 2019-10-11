@@ -39,7 +39,7 @@ class SocketManager:WebSocketDelegate {
             if let array = parsedData["message"] as? [String:[String: Any]] {
                 let objects =  Mapper<UserModel>().mapDictionary(JSON: array)
                 if let delegate = delegate {
-                        delegate.didRecieveObjects(objects: objects!)                    
+                    delegate.didRecieveObjects(objects: objects!)                    
                 }
             }
 
@@ -71,10 +71,19 @@ class SocketManager:WebSocketDelegate {
     var sock:WebSocket!
     
     func connect() {
-        let request = NSMutableURLRequest(url: URL(string:"ws://127.0.0.1:8000/ws/chat/George/")!)
-        request.allHTTPHeaderFields = HTTPCookie.requestHeaderFields(with: HTTPCookieStorage.shared.cookies!)
+        let request = NSMutableURLRequest(url: URL(string:"https://localhost:5204")!)
+        //request.allHTTPHeaderFields = HTTPCookie.requestHeaderFields(with: HTTPCookieStorage.shared.cookies!)
         sock = WebSocket.init(request: request as URLRequest)
         sock.delegate = self
+        sock.onText = { text in
+            
+        }
+        
+        sock.onData = { data in
+            
+        }
+        
+        sock.disableSSLCertValidation = true
         sock.connect()
     }
     
